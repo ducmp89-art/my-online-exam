@@ -190,7 +190,7 @@
         async function fetchExamCatalog() {
             try {
                 const response = await fetch('exams_index.json');
-                if (!response.ok) throw new Error("Không thể tải file danh mục exams_index.json");
+                if (!response.ok) throw new Error("Không thể tải file exams_index.json");
                 const data = await response.json();
                 examCatalog = data.exams || [];
 
@@ -213,7 +213,7 @@
 
             } catch (err) {
                 console.error(err);
-                document.getElementById('header-title').innerText = "Lỗi kết nối CSDL (Kiểm tra lại file exams_index.json)";
+                document.getElementById('header-title').innerText = "Lỗi kết nối CSDL (Kiểm tra file exams_index.json)";
             }
         }
 
@@ -258,6 +258,7 @@
                     importedObj = JSON.parse(text);
                 }
 
+                // Nếu dữ liệu đọc về theo cấu trúc DB chứa các key như DE_THCS...
                 if (importedObj && !importedObj.multipleChoice && !importedObj.essay) {
                     const firstKey = Object.keys(importedObj)[0];
                     const entry = importedObj[firstKey];
