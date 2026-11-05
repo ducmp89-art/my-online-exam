@@ -1,0 +1,172 @@
+const DB_TOAN_8_GK1 = {
+    "DE_THCS_HOANG_DIEU_2026": {
+        grade: "8", 
+        subject: "TOAN",
+        subjectName: "Toán học",
+        chapter: "Giữa học kỳ 1",
+        title: "Đề kiểm tra giữa học kỳ 1 năm 2026-2027 THCS Hoàng Diệu",
+        theory: String.raw`
+        `,
+        tips: String.raw`
+        `,
+        practice: String.raw`
+### I. Phần Tự luận
+
+**Bài 1 (1,5 điểm):** Cho đa thức $P=3x^{2}y-2xy^{2}+x^{2}y-5xy^{2}+4.$
+a) Thu gọn đa thức P.
+b) Tính giá trị của đa thức P tại $x=-1$, $y=2$.
+[GIAI]
+**Lời giải chi tiết:**
+a) Ta có:
+$$P = 3x^{2}y - 2xy^{2} + x^{2}y - 5xy^{2} + 4$$
+$$P = (3x^{2}y + x^{2}y) + (-2xy^{2} - 5xy^{2}) + 4$$
+$$P = 4x^{2}y - 7xy^{2} + 4$$
+
+b) Thay $x=-1$, $y=2$ vào đa thức P đã thu gọn, ta được:
+$$P = 4\cdot(-1)^{2}\cdot2 - 7\cdot(-1)\cdot2^{2} + 4 = 8 + 28 + 4 = 40$$
+Vậy giá trị của đa thức P tại $x=-1$, $y=2$ là 40.
+[/GIAI]
+
+**Bài 2 (3,0 điểm):** Thực hiện các phép tính sau:
+a) $(5x^{3}y^{2}-4x^{2}y^{4}+2xy)+(4x^{2}y^{4}-2x^{3}y^{2}+3xy)$
+b) $(4x-y)(x+2y)$
+c) $(15x^{4}y^{3}-10x^{3}y^{3} + 21x^{2}y^{2}):(-3x^{2}y^{2})$, (với $x\ne0$, $y\ne0)$
+[GIAI]
+**Lời giải chi tiết:**
+a) 
+$$(5x^{3}y^{2}-4x^{2}y^{4}+2xy)+(4x^{2}y^{4}-2x^{3}y^{2}+3xy)$$
+$$= 5x^{3}y^{2}-4x^{2}y^{4}+2xy+4x^{2}y^{4}-2x^{3}y^{2}+3xy$$
+$$= (5x^{3}y^{2}-2x^{3}y^{2})+(-4x^{2}y^{4}+4x^{2}y^{4})+(2xy+3xy)$$
+$$= 3x^{3}y^{2}+5xy$$
+
+b) 
+$$(4x-y)(x+2y)$$
+$$= 4x^{2}+8xy-xy-2y^{2}$$
+$$= 4x^{2}+7xy-2y^{2}$$
+
+c) 
+$$(15x^{4}y^{3}-10x^{3}y^{3} + 21x^{2}y^{2}):(-3x^{2}y^{2})$$
+$$= 15x^{4}y^{3}:(-3x^{2}y^{2}) + (-10x^{3}y^{3}):(-3x^{2}y^{2}) + 21x^{2}y^{2}:(-3x^{2}y^{2})$$
+$$= -5x^{2}y + \frac{10}{3}xy - 7$$
+[/GIAI]
+
+**Bài 3 (1,0 điểm):** Cho hình vẽ, biết I là trung điểm DF và EG; $\widehat{DEF}=90^{\circ}$. Chứng minh tứ giác DEFG là hình chữ nhật.
+[GIAI]
+**Lời giải chi tiết:**
+Tứ giác DEFG có hai đường chéo DF và EG cắt nhau tại I.
+Mà I là trung điểm của mỗi đường nên DEFG là hình bình hành.
+Hình bình hành DEFG có $\widehat{DEF}=90^{\circ}$ nên DEFG là hình chữ nhật.
+[/GIAI]
+
+**Bài 4 (2,0 điểm):** Cho $\triangle ABC$ vuông tại A $(AB<AC)$ có đường cao AH. Từ H kẻ $HE\perp AB$ tại E, $HF\perp AC$ tại F.
+a) Chứng minh tứ giác AEHF là hình chữ nhật.
+b) Vẽ điểm M sao cho H là trung điểm AM. Vẽ điểm N sao cho H là trung điểm BN. Chứng minh tứ giác ABMN là hình thoi và $AN \perp MC$.
+[GIAI]
+**Lời giải chi tiết:**
+a) 
+Vì $HE\perp AB$ tại E nên $\widehat{AEH}=90^{\circ}$.
+Vì $HF\perp AC$ tại F nên $\widehat{AFH}=90^{\circ}$.
+Vì $\triangle ABC$ vuông tại A nên $\widehat{EAF}=90^{\circ}$.
+Tứ giác AEHF có ba góc vuông nên là hình chữ nhật.
+
+b) 
+* Chứng minh tứ giác ABMN là hình thoi:
+Vì H là trung điểm của AM nên A, H, M thẳng hàng.
+Vì H là trung điểm của BN nên B, H, N thẳng hàng.
+Mà B, H, C thẳng hàng nên C, H, N thẳng hàng.
+Tứ giác ABMN có hai đường chéo AM và BN cắt nhau tại H, mà H là trung điểm của mỗi đường nên ABMN là hình bình hành.
+Mặt khác $AH\perp BC$ nên $AM\perp BN$.
+Hình bình hành ABMN có hai đường chéo vuông góc với nhau nên là hình thoi.
+
+* Chứng minh $AN \perp MC$:
+Vì ABMN là hình thoi nên $MN // AB$. Mà $AB\perp AC$ nên $MN\perp AC$.
+Vì $AH\perp BC$ nên $CH\perp AM$.
+Xét $\triangle AMC$ có $MN\perp AC$ và $CH\perp AM$, mà MN và CH cắt nhau tại N (vì C, H, N thẳng hàng) nên N là trực tâm của $\triangle AMC$.
+Do đó $AN\perp MC$.
+[/GIAI]
+
+**Bài 5 (0,5 điểm):** Một mảnh đất có dạng như phần được tô màu đậm trong hình (gồm hai hình chữ nhật ghép lại với các kích thước: $x+3y$, $2x-y$ và $x+3y$, $y$). 
+a) Hãy viết đa thức thu gọn với hai biến x và y biểu thị diện tích của mảnh đất đã cho.
+b) Tính diện tích mảnh đất khi biết $x=5$, $y=2$.
+[GIAI]
+**Lời giải chi tiết:**
+a) Phần tô đậm gồm hai hình chữ nhật.
+Diện tích mảnh đất là:
+$$S = (x+3y)(2x-y) + y(x+3y)$$
+$$S = (x+3y)(2x-y+y)$$
+$$S = 2x(x+3y)$$
+$$S = 2x^{2}+6xy$$ ($m^{2}$)
+
+b) Thay $x=5$, $y=2$ vào S ta được: 
+$$S = 2\cdot5^{2} + 6\cdot5\cdot2 = 50 + 60 = 110$$
+Vậy diện tích mảnh đất là 110 $m^{2}$.
+[/GIAI]
+
+### II. Phần Trắc nghiệm
+
+[QUIZ]
+Câu 1: Trong các biểu thức đại số sau, biểu thức nào là đơn thức?
+[A] $2x + y$
+[*B] $-3x^{2}yz$
+[C] $\frac{1}{x}+y$
+[D] $x-5$
+[/QUIZ]
+
+[QUIZ]
+Câu 2: Biểu thức nào sau đây không phải là đa thức?
+[A] $x^{2}+2xy$
+[B] $5x^{3}y-\frac{1}{2}$
+[*C] $\frac{1}{x}+y$
+[D] $x^{2}-y^{2}$
+[/QUIZ]
+
+[QUIZ]
+Câu 3: Kết quả của phép nhân đơn thức $-2x^{2}$ và đa thức $x-y$ là:
+[*A] $-2x^{3}+2x^{2}y$
+[B] $-2x^{3}-2x^{2}y$
+[C] $2x^{3}-2x^{2}y$
+[D] $2x^{3}+2x^{2}y$
+[/QUIZ]
+
+[QUIZ]
+Câu 4: Giá trị của biểu thức $A=x^{2}y-2xy+3$ tại $x=-1$, $y = 2$ là:
+[A] 6
+[B] 7
+[C] -1
+[*D] 9
+[/QUIZ]
+
+[QUIZ]
+Câu 5: Tổng số đo bốn góc trong một tứ giác lồi bằng:
+[A] $90^{\circ}$
+[B] $180^{\circ}$
+[C] $270^{\circ}$
+[*D] $360^{\circ}$
+[/QUIZ]
+
+[QUIZ]
+Câu 6: Cho hình thang cân ABCD (AB // CD) có $\widehat{C}=70^{\circ}$. Khẳng định nào sau đây là đúng?
+[A] $\widehat{D}=110^{\circ}$
+[B] $\widehat{A}=70^{\circ}$
+[*C] $\widehat{D}=70^{\circ}$
+[D] $\widehat{B}=100^{\circ}$
+[/QUIZ]
+
+[QUIZ]
+Câu 7: Cho tứ giác ABCD có AB // CD và AD // BC. Thêm điều kiện nào sau đây để tứ giác ABCD là hình chữ nhật?
+[*A] $AC=BD$
+[B] $AC\perp BD$
+[C] $AD=BC$
+[D] $AB=CD$
+[/QUIZ]
+
+[QUIZ]
+Câu 8: Cho hình bình hành ABCD có $\widehat{A}=90^{\circ}$. Khẳng định nào sau đây là SAI?
+[A] $\widehat{B}=\widehat{C}=\widehat{D}=90^{\circ}$
+[B] $AC=BD$
+[*C] $AC\perp BD$
+[D] $AB=CD$ và $AD=BC$
+[/QUIZ]
+        `
+    }
+};
