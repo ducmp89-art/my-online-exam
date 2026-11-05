@@ -61,7 +61,7 @@
             <div class="flex items-center space-x-3">
                 <span class="bg-indigo-700 text-indigo-100 text-xs px-2.5 py-1 rounded font-semibold tracking-wide uppercase">Cloud Exam</span>
                 <div>
-                    <h1 id="header-title" class="text-base font-bold leading-tight">Đang tải hệ thống...</h1>
+                    <h1 id="header-title" class="text-base font-bold leading-tight">Đang kết nối hệ thống...</h1>
                     <p id="header-subtitle" class="text-xs text-indigo-200">Đám mây trực tuyến</p>
                 </div>
             </div>
@@ -174,7 +174,7 @@
         </section>
     </main>
 
-    <!-- Cloud Fetch Logic -->
+    <!-- Cloud Fetch & Parser Logic -->
     <script>
         let examCatalog = [];
         let examData = {};
@@ -187,11 +187,10 @@
             fetchExamCatalog();
         });
 
-        // 1. Tải danh mục đề thi từ GitHub (`exams_index.json`)
         async function fetchExamCatalog() {
             try {
                 const response = await fetch('exams_index.json');
-                if (!response.ok) throw new Error("Không thể tải file danh mục đề thi.");
+                if (!response.ok) throw new Error("Không thể tải file danh mục exams_index.json");
                 const data = await response.json();
                 examCatalog = data.exams || [];
 
@@ -203,36 +202,74 @@
                     return;
                 }
 
-                examCatalog.forEach((ex, idx) => {
+                examCatalog.forEach((ex) => {
                     const opt = document.createElement('option');
                     opt.value = ex.path;
                     opt.textContent = ex.title;
                     selector.appendChild(opt);
                 });
 
-                // Mặc định tải đề đầu tiên
                 loadExamContent(examCatalog[0].path);
 
             } catch (err) {
                 console.error(err);
-                document.getElementById('header-title').innerText = "Lỗi kết nối dữ liệu đám mây!";
+                document.getElementById('header-title').innerText = "Lỗi kết nối CSDL (Kiểm tra lại file exams_index.json)";
             }
         }
 
-        // 2. Khi người dùng chọn đề thi khác từ Dropdown
         function onSelectExamFromCloud(path) {
             if (!path) return;
             loadExamContent(path);
         }
 
-        // 3. Tải nội dung chi tiết của file JSON đề thi
         async function loadExamContent(path) {
             try {
                 const response = await fetch(path);
-                if (!response.ok) throw new Error("Không thể tải nội dung đề thi.");
-                examData = await response.json();
+                if (!response.ok) throw new Error("Không tìm thấy file đề thi tại: " + path);
+                const text = await response.text();
 
-                // Reset trạng thái làm bài & đếm giờ
+                let importedObj = null;
+                try {
+                    const fn = new Function(`
+                        let examData = undefined;
+                        let extracted = null;
+                        try {
+                            ${text};
+                            for (let key in this) {
+                                if (key.startsWith('DB_')) return this[key];
+                            }
+                            if (typeof examData !== 'undefined') return examData;
+                        } catch(err) {}
+                        return extracted;
+                    `);
+                    importedObj = fn();
+                } catch(e) {}
+
+                if (!importedObj) {
+                    const matchDB = text.match(/(DB_[A-Za-z0-9_]+)\s*=\s*(\{[\s\S]*\});?\s*$/m) || text.match(/(DB_[A-Za-z0-9_]+)\s*=\s*(\{[\s\S]*\})/);
+                    if (matchDB) {
+                        try {
+                            importedObj = (new Function(`return ${matchDB[2]}`))();
+                        } catch(e) {}
+                    }
+                }
+
+                if (!importedObj) {
+                    importedObj = JSON.parse(text);
+                }
+
+                if (importedObj && !importedObj.multipleChoice && !importedObj.essay) {
+                    const firstKey = Object.keys(importedObj)[0];
+                    const entry = importedObj[firstKey];
+                    if (entry && (entry.practice || entry.theory)) {
+                        examData = convertDBFormatToExamData(entry);
+                    } else {
+                        examData = entry;
+                    }
+                } else {
+                    examData = importedObj;
+                }
+
                 studentAnswers = { mc: {}, essay: {} };
                 isSubmitted = false;
                 if (timerInterval) clearInterval(timerInterval);
@@ -249,9 +286,101 @@
                 startTimer();
 
             } catch (err) {
-                alert("Lỗi tải đề thi: " + err.message);
+                alert("Lỗi tải nội dung đề: " + err.message);
                 console.error(err);
             }
+        }
+
+        function convertDBFormatToExamData(entry) {
+            const practiceText = entry.practice || "";
+            
+            const mcQuestions = [];
+            const quizRegex = /\[QUIZ\]([\s\S]*?)\[\/QUIZ\]/g;
+            let match;
+            let qId = 1;
+
+            while ((match = quizRegex.exec(practiceText)) !== null) {
+                const quizContent = match[1].trim();
+                const lines = quizContent.split('\n').map(l => l.trim()).filter(l => l);
+                
+                let qTitle = "";
+                let options = {};
+                let correctOpt = "A";
+
+                lines.forEach(line => {
+                    if (!line.startsWith("[")) {
+                        if (!qTitle) qTitle = line;
+                    }
+                    const optMatch = line.match(/^\[(\*?)([A-D])\]\s*(.*)$/);
+                    if (optMatch) {
+                        const isCorrect = optMatch[1] === "*";
+                        const optKey = optMatch[2];
+                        const optText = optMatch[3];
+                        options[optKey] = optText;
+                        if (isCorrect) correctOpt = optKey;
+                    }
+                });
+
+                qTitle = qTitle.replace(/^Câu\s*\d+[:\.]?\s*/i, '');
+                mcQuestions.push({
+                    id: qId++,
+                    question: qTitle,
+                    options: options,
+                    answer: correctOpt,
+                    explanation: "Xem lời giải chi tiết."
+                });
+            }
+
+            const essayQuestions = [];
+            let cleanText = practiceText.replace(/###\s*Phần tự luận/gi, '').replace(/###\s*I\.\s*Phần Tự luận/gi, '').trim();
+            const essayBlocks = cleanText.split(/(?=(?:\*\*|\#\#\s*)?(?:Bài|Câu)\s+\d+)/i);
+            let essayId = 1;
+
+            essayBlocks.forEach(block => {
+                let trimmed = block.trim();
+                if (!trimmed || trimmed.includes("[QUIZ]")) return;
+                
+                let statement = trimmed;
+                let solution = "";
+                
+                if (trimmed.includes("[GIAI]")) {
+                    const parts = trimmed.split(/\[GIAI\]/);
+                    statement = parts[0];
+                    solution = parts[1].replace(/\[\/GIAI\]/g, '').replace(/\*\*Lời giải chi tiết:\*\*/g, '').trim();
+                }
+
+                const titleMatch = statement.match(/^(?:\*\*|\#\#\s*)?((?:Bài|Câu)\s+\d+(?:\s*\([\d,\.]+\s*điểm\))?)/i);
+                let title = `Bài ${essayId}`;
+                
+                if (titleMatch) {
+                    title = titleMatch[1].replace(/\*\*/g, '').trim();
+                    statement = statement.replace(/^(?:\*\*|\#\#\s*)?(?:Bài|Câu)\s+\d+([^\n]*)\n?/, '').trim();
+                }
+
+                statement = statement.replace(/^\*\*/, '').replace(/\*\*$/, '').trim();
+
+                if (statement) {
+                    essayQuestions.push({
+                        id: essayId++,
+                        title: title,
+                        statement: statement,
+                        solution: solution || "Xem lời giải chi tiết."
+                    });
+                }
+            });
+
+            return {
+                metadata: {
+                    school: entry.title || "Trường THCS",
+                    subject: entry.subjectName || "Toán",
+                    grade: `Lớp ${entry.grade || '8'}`,
+                    academicYear: "2026-2027",
+                    testName: entry.chapter || "Kiểm tra",
+                    durationMinutes: 60
+                },
+                multipleChoice: mcQuestions,
+                essay: essayQuestions
+            };
         }
 
         function renderExamPaper() {
@@ -262,7 +391,6 @@
             document.getElementById('paper-title').innerText = `ĐỀ KIỂM TRA - ${meta.testName || ''}`;
             document.getElementById('paper-subtitle').innerText = `Môn: ${meta.subject || 'Toán'} - ${meta.grade || 'Lớp 8'}`;
 
-            // Render Trắc nghiệm
             const mcList = document.getElementById('mc-questions-list');
             mcList.innerHTML = '';
             if (examData.multipleChoice && examData.multipleChoice.length > 0) {
@@ -287,7 +415,6 @@
                 mcList.innerHTML = '<p class="text-xs text-slate-400 italic">Không có câu hỏi trắc nghiệm.</p>';
             }
 
-            // Render Tự luận
             const essayList = document.getElementById('essay-questions-list');
             essayList.innerHTML = '';
             if (examData.essay && examData.essay.length > 0) {
