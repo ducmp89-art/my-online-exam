@@ -258,7 +258,6 @@
                     importedObj = JSON.parse(text);
                 }
 
-                // Nếu dữ liệu đọc về theo cấu trúc DB chứa các key như DE_THCS...
                 if (importedObj && !importedObj.multipleChoice && !importedObj.essay) {
                     const firstKey = Object.keys(importedObj)[0];
                     const entry = importedObj[firstKey];
