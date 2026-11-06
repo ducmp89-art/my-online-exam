@@ -10,13 +10,6 @@
   "multipleChoice": [
     {
       "id": 1,
-      "question": "Trong các biểu thức đại số sau, biểu thức nào là đơn thức?",
-      "options": {
-        theory: String.raw`
-        `,
-        tips: String.raw`
-        `,
-        practice: String.raw`
 ### I. Phần Tự luận
 
 **Bài 1 (1,5 điểm):** Cho đa thức $P=3x^{2}y-2xy^{2}+x^{2}y-5xy^{2}+4.$
