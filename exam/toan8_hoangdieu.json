@@ -1,10 +1,17 @@
-const DB_TOAN_8_GK1 = {
-    "DE_THCS_HOANG_DIEU_2026": {
-        grade: "8", 
-        subject: "TOAN",
-        subjectName: "Toán học",
-        chapter: "Giữa học kỳ 1",
-        title: "Đề kiểm tra giữa học kỳ 1 năm 2026-2027 THCS Hoàng Diệu",
+{
+  "metadata": {
+    "school": "Trường THCS Hoàng Diệu",
+    "subject": "Toán",
+    "grade": "Lớp 8",
+    "academicYear": "2026-2027",
+    "testName": "Kiểm tra giữa học kỳ I",
+    "durationMinutes": 60
+  },
+  "multipleChoice": [
+    {
+      "id": 1,
+      "question": "Trong các biểu thức đại số sau, biểu thức nào là đơn thức?",
+      "options": {
         theory: String.raw`
         `,
         tips: String.raw`
